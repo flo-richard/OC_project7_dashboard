@@ -41,11 +41,28 @@ def main():
         gender_code = 'M' if gender == 'Male' else 'F'
 
         #Date of birth
-        birthday = st.date_input(
-            label='Date of birth of the client',
-            value=date(1970, 1, 1)
-        )
-        number_days_birth = -NumberOfDays(birthday)
+        st.write('Date of Birth')
+        c1, c2, c3 = st.columns(3)        
+        with c1:
+            day_birth = st.number_input(
+                label='Day of birth',
+                min_value=1,
+                max_value=31
+            )
+        with c2:
+            month_birth = st.number_input(
+                label='Month of birth (number)',
+                min_value=1,
+                max_value=12
+            )
+        with c3:
+            year_birth = st.number_input(
+                label='Year of birth',
+                min_value=1900
+            )
+        date_birth = date(int(year_birth), int(month_birth), int(day_birth))     
+        number_days_birth = -NumberOfDays(date_birth)
+        #number_days_birth = birthday
 
         #email and phone
         email = st.selectbox(
@@ -129,7 +146,7 @@ def main():
         #Income
         annual_income = st.number_input(
             label='Annual income',
-            min_value=0
+            min_value=1
         )
 
         #Income type
@@ -142,12 +159,28 @@ def main():
         
 
         #Days employed
-        date_employment = st.date_input(
-            label='When did the client begin his current employment?',
-            value=date(2000, 1, 1)
-        )
+        st.write('Date of Employment')       
+        c4, c5, c6 = st.columns(3)       
+        with c4:
+            day_emp = st.number_input(
+                label='Day',
+                min_value=1,
+                max_value=31
+            )
+        with c5:
+            month_emp = st.number_input(
+                label='Month (number)',
+                min_value=1,
+                max_value=12
+            )
+        with c6:
+            year_emp = st.number_input(
+                label='Year',
+                min_value=1900
+            )
+        date_employment = date(int(year_emp), int(month_emp), int(day_emp))        
         days_employed = NumberOfDays(date_employment)
-
+        #days_employed = date_employment
 
             #CONTRACT
         st.write('Contract information')
@@ -161,13 +194,13 @@ def main():
         #Credit amount
         amount_credit = st.number_input(
             label='Requested credit amout',
-            min_value=0
+            min_value=1
         )
 
         #Goods price
         goods_price = st.number_input(
             label='Price of the good(s) the client wishes to buy',
-            min_value=0
+            min_value=1
         )
 
         #Annuity
@@ -203,13 +236,16 @@ def main():
                 'ORGANIZATION_TYPE': organization_type
             }
 
-    response = request_prediction(URL_online, payload)
-    if response['Prediction'] == 1:
-        st.write('Credit Granted')
-    else:
-        st.write('Credit denied')
+            response = request_prediction(URL_online, payload)
+            st.json(response)
 
-    st.write('Details')
+            st.write(response['Prediction'])
+            if response['Prediction'] == 1:
+                st.write('Credit Granted')
+            else:
+                st.write('Credit denied')
+
+            st.write('Details')
 
 
 
