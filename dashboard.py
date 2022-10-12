@@ -19,7 +19,7 @@ def request_prediction(model_url, payload):
 def NumberOfDays(date1):
     return (date.today() - date1).days
 
-URL_online = "https://scoring-oc7.herokuapp.com"
+URL_online = "https://scoring-oc7.herokuapp.com/getPrediction"
 
 def main():
 
