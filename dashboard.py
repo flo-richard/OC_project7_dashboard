@@ -255,9 +255,9 @@ def main():
                 for i in response['Explainer list']:
                     names.append(i[0])
 
-                for i in range(len(result['Explainer map']['Feature_idx'])):
-                    colors.append('green' if result['Explainer map']['Scaled_value'][i] > 0 else 'red')
-                values = [i for i in result['Explainer map']['Scaled_value']]
+                for i in range(len(response['Explainer map']['Feature_idx'])):
+                    colors.append('green' if response['Explainer map']['Scaled_value'][i] > 0 else 'red')
+                values = [i for i in response['Explainer map']['Scaled_value']]
 
 
                 names.reverse()
