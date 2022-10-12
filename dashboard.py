@@ -264,12 +264,12 @@ def main():
                 values.reverse()
                 colors.reverse()
 
-                fig, ax = plt.figure(figsize=(12, 8))
+                fig = plt.figure(figsize=(12, 8))
 
-                ax.barh(range(len(names)), values, tick_label=names, color=colors)
-                ax.title('Most impactful parameters')
+                plt.barh(range(len(names)), values, tick_label=names, color=colors)
+                plt.title('Most impactful parameters')
 
-                ax.grid()
+                plt.grid()
                 st.pyplot(fig)
 
                 st.write('Details')
