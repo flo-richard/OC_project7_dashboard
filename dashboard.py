@@ -238,13 +238,36 @@ def main():
                 }
 
                 response = request_prediction(URL_online, payload)
-                st.json(response)
 
                 st.write(response['Prediction'])
                 if response['Prediction'] == 1:
                     st.write('Credit Granted')
                 else:
                     st.write('Credit denied')
+
+                st.write('Details')
+
+                feature_list = [i for i in response['User info']]
+                names = []
+                colors = []
+
+                for i in response['Explainer list']:
+                    names.append(i[0])
+
+                for i in range(len(result['Explainer map']['Feature_idx'])):
+                    colors.append('green' if result['Explainer map']['Scaled_value'][i] > 0 else 'red')
+                values = [i for i in result['Explainer map']['Scaled_value']]
+
+
+                names.reverse()
+                values.reverse()
+                colors.reverse()
+
+                plt.barh(range(len(names)), values, tick_label=names, color=colors)
+                plt.title('Most impactful parameters')
+
+                plt.grid()
+                st.pyplot()
 
                 st.write('Details')
 
