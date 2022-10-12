@@ -250,10 +250,10 @@ def main():
 
                 j=1
                 fig = plt.figure(figsize=(12, 7))
-                for i in result['Distributions']:
+                for i in response['Distributions']:
                     ax = fig.add_subplot(2, 3, j)
-                    h = ax.hist(result['Distributions'][i], bins=40)
-                    plt.axvline(result['User info'][i], c='k')
+                    h = ax.hist(response['Distributions'][i], bins=40)
+                    plt.axvline(response['User info'][i], c='k')
                     ax.set_title(i)
                     j += 1
 
