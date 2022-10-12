@@ -89,10 +89,11 @@ def main():
             min_value=0
         )
 
-        children_count = st.number_input(
+        children_count_select = st.selectbox(
             label='Number of children of the client',
-            min_value=0
+            options=('1', '2', '3', '4', '5+')
         )
+        children_count = int(children_count_select) if children_count_select in ['1', '2', '3', '4'] else 5
 
         #Flag own car
         own_car = st.selectbox(
