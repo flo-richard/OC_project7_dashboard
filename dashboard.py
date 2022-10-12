@@ -214,38 +214,59 @@ def main():
 
         if submitted:
 
-            payload = {
-                'NAME_CONTRACT_TYPE': contract_type,
-                'CODE_GENDER': gender_code,
-                'FLAG_OWN_CAR': flag_own_car,
-                'FLAG_OWN_REALTY': flag_own_realty,
-                'CNT_CHILDREN': children_count,
-                'AMT_INCOME_TOTAL': annual_income,
-                'AMT_CREDIT': amount_credit,
-                'AMT_ANNUITY': annuity,
-                'AMT_GOODS_PRICE': goods_price,
-                'NAME_INCOME_TYPE': income_type,
-                'NAME_EDUCATION_TYPE': education_type,
-                'NAME_FAMILY_STATUS': family_status,
-                'NAME_HOUSING_TYPE': housing_type,
-                'DAYS_BIRTH': number_days_birth,
-                'DAYS_EMPLOYED': days_employed,
-                'FLAG_MOBIL': flag_phone,
-                'FLAG_EMAIL': flag_email,
-                'CNT_FAM_MEMBERS': family_members_count,
-                'ORGANIZATION_TYPE': organization_type
-            }
+            with st.spinner('Loading...'):
+                payload = {
+                    'NAME_CONTRACT_TYPE': contract_type,
+                    'CODE_GENDER': gender_code,
+                    'FLAG_OWN_CAR': flag_own_car,
+                    'FLAG_OWN_REALTY': flag_own_realty,
+                    'CNT_CHILDREN': children_count,
+                    'AMT_INCOME_TOTAL': annual_income,
+                    'AMT_CREDIT': amount_credit,
+                    'AMT_ANNUITY': annuity,
+                    'AMT_GOODS_PRICE': goods_price,
+                    'NAME_INCOME_TYPE': income_type,
+                    'NAME_EDUCATION_TYPE': education_type,
+                    'NAME_FAMILY_STATUS': family_status,
+                    'NAME_HOUSING_TYPE': housing_type,
+                    'DAYS_BIRTH': number_days_birth,
+                    'DAYS_EMPLOYED': days_employed,
+                    'FLAG_MOBIL': flag_phone,
+                    'FLAG_EMAIL': flag_email,
+                    'CNT_FAM_MEMBERS': family_members_count,
+                    'ORGANIZATION_TYPE': organization_type
+                }
 
-            response = request_prediction(URL_online, payload)
-            st.json(response)
+                response = request_prediction(URL_online, payload)
+                st.json(response)
 
-            st.write(response['Prediction'])
-            if response['Prediction'] == 1:
-                st.write('Credit Granted')
-            else:
-                st.write('Credit denied')
+                st.write(response['Prediction'])
+                if response['Prediction'] == 1:
+                    st.write('Credit Granted')
+                else:
+                    st.write('Credit denied')
 
-            st.write('Details')
+                st.write('Details')
+
+                j=1
+                fig = plt.figure(figsize=(12, 7))
+                for i in result['Distributions']:
+                    ax = fig.add_subplot(2, 3, j)
+                    h = ax.hist(result['Distributions'][i], bins=40)
+                    plt.axvline(result['User info'][i], c='k')
+                    ax.set_title(i)
+                    j += 1
+
+                st.pyplot(fig)
+
+
+
+
+            st.success('Completed')    
+
+
+
+
 
 
 
