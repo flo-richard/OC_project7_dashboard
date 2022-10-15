@@ -17,6 +17,7 @@ def request_prediction(model_url, payload):
     return response.json()
 
 def NumberOfDays(date1):
+    """Computes the number of days passed since a giver date"""
     return (date.today() - date1).days
 
 URL_online = "https://scoring-oc7.herokuapp.com/getPrediction"
@@ -28,7 +29,6 @@ def main():
     st.write('Please file this form')
 
     with st.form('credit_form'):
-
         
             #GENERAL INFO
         st.write('General information')
@@ -62,7 +62,6 @@ def main():
             )
         date_birth = date(int(year_birth), int(month_birth), int(day_birth))     
         number_days_birth = -NumberOfDays(date_birth)
-        #number_days_birth = birthday
 
         #email and phone
         email = st.selectbox(
@@ -95,7 +94,7 @@ def main():
         )
         children_count = int(children_count_select) if children_count_select in ['0', '1', '2', '3', '4'] else 5
 
-        #Flag own car
+        #Car
         own_car = st.selectbox(
             label='Does the client own a car?',
             options=('Yes', 'No')
@@ -107,7 +106,7 @@ def main():
             label='Does the client own a house/appartment/realty of any kind?',
             options=('Yes', 'No')
         )
-        flag_own_realty = 'Y' if own_car == 'Yes' else 'N'
+        flag_own_realty = 'Y' if own_realty == 'Yes' else 'N'
 
         housing_type = st.selectbox(
             label='What kind of housing does the client live in?',
@@ -157,8 +156,6 @@ def main():
                     'Unemployed', 'Student', 'Businessman', 'Maternity leave')
         )
 
-        
-
         #Days employed
         st.write('Date of Employment')       
         c4, c5, c6 = st.columns(3)       
@@ -181,7 +178,7 @@ def main():
             )
         date_employment = date(int(year_emp), int(month_emp), int(day_emp))        
         days_employed = NumberOfDays(date_employment)
-        #days_employed = date_employment
+
 
             #CONTRACT
         st.write('Contract information')
@@ -194,7 +191,7 @@ def main():
 
         #Credit amount
         amount_credit = st.number_input(
-            label='Requested credit amout',
+            label='Requested credit amount',
             min_value=1
         )
 
@@ -244,7 +241,7 @@ def main():
                 if response['Prediction'] == 1:
                     st.write('Credit Granted')
                 else:
-                    st.write('Credit denied')
+                    st.write('Credit Denied')
 
                 st.write('Details')
 
@@ -257,6 +254,7 @@ def main():
 
                 for i in range(len(response['Explainer map']['Feature_idx'])):
                     colors.append('green' if response['Explainer map']['Scaled_value'][i] > 0 else 'red')
+                    
                 values = [i for i in response['Explainer map']['Scaled_value']]
 
 
