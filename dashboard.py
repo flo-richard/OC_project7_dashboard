@@ -21,6 +21,7 @@ def NumberOfDays(date1):
     return (date.today() - date1).days
 
 URL_online = "https://scoring-oc7.herokuapp.com/getPrediction"
+URL_local = "http://127.0.0.1:8000/getPrediction"
 
 def main():
 
@@ -238,6 +239,8 @@ def main():
                 response = request_prediction(URL_online, payload)
 
                 st.write(response['Prediction'])
+                st.write('Probability of class 0 :', response['Prediction probabilities'][0])
+                st.write('Probability of class 1 :', response['Prediction probabilities'][1])
                 if response['Prediction'] == 1:
                     st.write('Credit Granted')
                 else:
@@ -254,7 +257,7 @@ def main():
 
                 for i in range(len(response['Explainer map']['Feature_idx'])):
                     colors.append('green' if response['Explainer map']['Scaled_value'][i] > 0 else 'red')
-                    
+
                 values = [i for i in response['Explainer map']['Scaled_value']]
 
 
