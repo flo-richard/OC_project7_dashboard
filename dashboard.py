@@ -238,7 +238,7 @@ def main():
 
                 response = request_prediction(URL_online, payload)
 
-                st.write(response['Prediction'])
+                st.write('Prediction :', response['Prediction'])
                 st.write('Probability of class 0 :', response['Prediction probabilities'][0])
                 st.write('Probability of class 1 :', response['Prediction probabilities'][1])
                 if response['Prediction'] == 1:
@@ -291,15 +291,7 @@ def main():
 
             st.success('Completed')    
 
-
-
-
-
-
-
-
-
-
+            
 
         
 if __name__ == '__main__':
