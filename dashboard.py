@@ -26,14 +26,12 @@ URL_local = "http://127.0.0.1:8000/getPrediction"
 def main():
 
     st.title('Credit Prediction')
+    id_number = st.number_input(
+                label='Client ID',
+                min_value=100002
+        )
 
-    with st.form('form'):
-        id_number = st.number_input(
-                 label='Client ID',
-                 min_value=100002
-            )
-
-        show_info = st.ckeckbox(label='Display client details')
+    show_info = st.checkbox(label='Display client details')
 
     # st.write('Please file this form')
 
@@ -217,95 +215,95 @@ def main():
     #     )
     #     annuity = amount_credit / years_payoff
 
-        submitted = st.form_submit_button('Submit')
+    submitted = st.button('Submit')
 
-        if submitted:
+    if submitted:
 
-            with st.spinner('Loading...'):
-                # payload = {
-                #     'NAME_CONTRACT_TYPE': contract_type,
-                #     'CODE_GENDER': gender_code,
-                #     'FLAG_OWN_CAR': flag_own_car,
-                #     'FLAG_OWN_REALTY': flag_own_realty,
-                #     'CNT_CHILDREN': children_count,
-                #     'AMT_INCOME_TOTAL': annual_income,
-                #     'AMT_CREDIT': amount_credit,
-                #     'AMT_ANNUITY': annuity,
-                #     'AMT_GOODS_PRICE': goods_price,
-                #     'NAME_INCOME_TYPE': income_type,
-                #     'NAME_EDUCATION_TYPE': education_type,
-                #     'NAME_FAMILY_STATUS': family_status,
-                #     'NAME_HOUSING_TYPE': housing_type,
-                #     'DAYS_BIRTH': number_days_birth,
-                #     'DAYS_EMPLOYED': days_employed,
-                #     'FLAG_MOBIL': flag_phone,
-                #     'FLAG_EMAIL': flag_email,
-                #     'CNT_FAM_MEMBERS': family_members_count,
-                #     'ORGANIZATION_TYPE': organization_type
-                # }
-                payload = id_number
+        with st.spinner('Loading...'):
+            # payload = {
+            #     'NAME_CONTRACT_TYPE': contract_type,
+            #     'CODE_GENDER': gender_code,
+            #     'FLAG_OWN_CAR': flag_own_car,
+            #     'FLAG_OWN_REALTY': flag_own_realty,
+            #     'CNT_CHILDREN': children_count,
+            #     'AMT_INCOME_TOTAL': annual_income,
+            #     'AMT_CREDIT': amount_credit,
+            #     'AMT_ANNUITY': annuity,
+            #     'AMT_GOODS_PRICE': goods_price,
+            #     'NAME_INCOME_TYPE': income_type,
+            #     'NAME_EDUCATION_TYPE': education_type,
+            #     'NAME_FAMILY_STATUS': family_status,
+            #     'NAME_HOUSING_TYPE': housing_type,
+            #     'DAYS_BIRTH': number_days_birth,
+            #     'DAYS_EMPLOYED': days_employed,
+            #     'FLAG_MOBIL': flag_phone,
+            #     'FLAG_EMAIL': flag_email,
+            #     'CNT_FAM_MEMBERS': family_members_count,
+            #     'ORGANIZATION_TYPE': organization_type
+            # }
+            payload = id_number
 
-                response = request_prediction(URL_online, payload)
-                if response['Status'] == 'Error':
-                    st.write(response['Message'])
-                
+            response = request_prediction(URL_online, payload)
+            if response['Status'] == 'Error':
+                st.write(response['Message'])
+            
+            else:
+
+                st.write('Prediction :', response['Prediction'])
+                st.write('Probability of class 0 :', response['Prediction probabilities'][0])
+                st.write('Probability of class 1 :', response['Prediction probabilities'][1])
+                if response['Prediction'] == 1:
+                    st.write('Credit Granted')
                 else:
+                    st.write('Credit Denied')
 
-                    st.write('Prediction :', response['Prediction'])
-                    st.write('Probability of class 0 :', response['Prediction probabilities'][0])
-                    st.write('Probability of class 1 :', response['Prediction probabilities'][1])
-                    if response['Prediction'] == 1:
-                        st.write('Credit Granted')
-                    else:
-                        st.write('Credit Denied')
+                st.write('Details')
 
-                    st.write('Details')
+                feature_list = [i for i in response['User info']]
+                names = []
+                colors = []
 
-                    feature_list = [i for i in response['User info']]
-                    names = []
-                    colors = []
+                for i in response['Explainer list']:
+                    names.append(i[0])
 
-                    for i in response['Explainer list']:
-                        names.append(i[0])
+                for i in range(len(response['Explainer map']['Feature_idx'])):
+                    colors.append('green' if response['Explainer map']['Scaled_value'][i] > 0 else 'red')
 
-                    for i in range(len(response['Explainer map']['Feature_idx'])):
-                        colors.append('green' if response['Explainer map']['Scaled_value'][i] > 0 else 'red')
-
-                    values = [i for i in response['Explainer map']['Scaled_value']]
+                values = [i for i in response['Explainer map']['Scaled_value']]
 
 
-                    names.reverse()
-                    values.reverse()
-                    colors.reverse()
+                names.reverse()
+                values.reverse()
+                colors.reverse()
 
-                    fig = plt.figure(figsize=(12, 8))
+                fig = plt.figure(figsize=(12, 8))
 
-                    plt.barh(range(len(names)), values, tick_label=names, color=colors)
-                    plt.title('Most impactful parameters')
+                plt.barh(range(len(names)), values, tick_label=names, color=colors)
+                plt.title('Most impactful parameters')
 
-                    plt.grid()
-                    st.pyplot(fig)
+                plt.grid()
+                st.pyplot(fig)
 
-                    st.write('Details')
+                st.write('Details')
 
-                    j=1
-                    fig = plt.figure(figsize=(12, 7))
-                    for i in response['Distributions']:
-                        ax = fig.add_subplot(2, 3, j)
-                        h = ax.hist(response['Distributions'][i], bins=40)
-                        plt.axvline(response['User info'][i], c='k')
-                        ax.set_title(i)
-                        j += 1
+                j=1
+                fig = plt.figure(figsize=(12, 7))
+                for i in response['Distributions']:
+                    ax = fig.add_subplot(2, 3, j)
+                    h = ax.hist(response['Distributions'][i], bins=40)
+                    plt.axvline(response['User info'][i], c='k')
+                    ax.set_title(i)
+                    j += 1
 
-                    st.pyplot(fig)
+                st.pyplot(fig)
 
 
-                    if show_info:
-                        st.write('Client Details:')
+                if show_info:
+                    st.write('Client Details:')
 
-                        st.json(response['User info'])
+                    st.json(response['User info'])
 
-                st.success('Completed')    
+            st.success('Completed')    
 
             
 
