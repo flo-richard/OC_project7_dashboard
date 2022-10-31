@@ -291,7 +291,7 @@ def main():
                 for i in response['Distributions']:
                     ax = fig.add_subplot(2, 3, j)
                     h = ax.hist(response['Distributions'][i], bins=40)
-                    plt.axvline(response['User info'][i][id], c='k')
+                    plt.axvline(response['User info'][i]['id'], c='k')
                     ax.set_title(i)
                     j += 1
 
