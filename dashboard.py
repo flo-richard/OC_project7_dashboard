@@ -30,7 +30,7 @@ def main():
                 label='Client ID',
                 min_value=100002
         )
-
+    id_number = int(id_number)
     show_info = st.checkbox(label='Display client details')
 
     # st.write('Please file this form')
@@ -241,7 +241,7 @@ def main():
             #     'CNT_FAM_MEMBERS': family_members_count,
             #     'ORGANIZATION_TYPE': organization_type
             # }
-            payload = {'id' : id_number}
+            payload = {'id': id_number}
 
             response = request_prediction(URL_online, payload)
             if response['Status'] == 'Error':
