@@ -20,7 +20,7 @@ def NumberOfDays(date1):
     """Computes the number of days passed since a giver date"""
     return (date.today() - date1).days
 
-URL_online = "https://scoring-oc7.herokuapp.com/getPrediction"
+URL_online = "https://scoring-oc7.herokuapp.com"
 URL_local = "http://127.0.0.1:8000/getPrediction"
 
 def main():
