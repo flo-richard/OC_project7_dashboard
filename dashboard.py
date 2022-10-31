@@ -241,7 +241,7 @@ def main():
             #     'CNT_FAM_MEMBERS': family_members_count,
             #     'ORGANIZATION_TYPE': organization_type
             # }
-            payload = id_number
+            payload = {'id' : id_number}
 
             response = request_prediction(URL_online, payload)
             if response['Status'] == 'Error':
