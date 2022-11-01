@@ -5,6 +5,7 @@ import numpy as np
 import lime
 import matplotlib.pyplot as plt
 from datetime import date
+import plotly.express as px
 
 
 def request_prediction(model_url, payload):
@@ -31,7 +32,7 @@ def main():
                 min_value=100002
         )
     id_number = int(id_number)
-    show_info = st.checkbox(label='Display client details')
+    show_info = st.checkbox(label='Display client details', value=True)
 
     submitted = st.button('Submit')
 
@@ -41,7 +42,7 @@ def main():
             
             payload = {'id': id_number}
 
-            response = request_prediction(URL_online, payload)
+            response = request_prediction(URL_local, payload)
             if response['Status'] == 'Error':
                 st.write(response['Message'])
             
@@ -85,15 +86,18 @@ def main():
                 st.write('Details')
 
                 j=1
-                fig = plt.figure(figsize=(12, 7))
                 for i in response['Distributions']:
-                    ax = fig.add_subplot(2, 3, j)
-                    h = ax.hist(response['Distributions'][i], bins=40)
-                    plt.axvline(response['User info'][i][str(id_number)], c='k')
-                    ax.set_title(i)
-                    j += 1
+                    
 
-                st.pyplot(fig)
+                    fig = px.histogram(response['Distributions'][i], nbins=40, title=i)
+                    fig.add_vline(
+                        x=response['User info'][i][str(id_number)],
+                        annotation_text=str(response['User info'][i][str(id_number)]),
+                        annotation_position='top right'                    
+                    )
+
+                    st.plotly_chart(fig)
+                    j+=1
 
 
                 if show_info:
