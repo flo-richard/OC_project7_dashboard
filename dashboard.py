@@ -42,7 +42,7 @@ def main():
             
             payload = {'id': id_number}
 
-            response = request_prediction(URL_local, payload)
+            response = request_prediction(URL_online, payload)
             if response['Status'] == 'Error':
                 st.write(response['Message'])
             
