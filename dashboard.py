@@ -17,9 +17,6 @@ def request_prediction(model_url, payload):
         )
     return response.json()
 
-def NumberOfDays(date1):
-    """Computes the number of days passed since a giver date"""
-    return (date.today() - date1).days
 
 URL_online = "https://scoring-oc7.herokuapp.com/getPrediction"
 URL_local = "http://127.0.0.1:8000/getPrediction"
@@ -47,10 +44,10 @@ def main():
                 st.write(response['Message'])
             
             else:
-
+                
+                st.write('Score :', response['Score'])
+                st.write('Threshold :', response['Threshold'])
                 st.write('Prediction :', response['Prediction'])
-                st.write('Probability of class 0 :', response['Prediction probabilities'][0])
-                st.write('Probability of class 1 :', response['Prediction probabilities'][1])
                 if response['Prediction'] == 1:
                     st.write('Credit Granted')
                 else:
