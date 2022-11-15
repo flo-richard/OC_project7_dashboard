@@ -45,7 +45,7 @@ def main():
             
             else:
                 
-                st.write('Score :', response['Score'])
+                st.write('Score :', response['Score'], '/ 1')
                 st.write('Threshold :', response['Threshold'])
                 st.write('Prediction :', response['Prediction'])
                 if response['Prediction'] == 1:
